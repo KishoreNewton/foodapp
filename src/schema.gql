@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Hotel {
+  isGood: Boolean
+  name: String!
+}
+
 type Query {
-  isPizzaGood: Boolean!
+  hotels(veganOnly: Boolean!): [Hotel!]!
 }
