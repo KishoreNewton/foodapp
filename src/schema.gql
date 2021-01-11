@@ -2,17 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateHotelDto {
+  address: String!
+  isVegan: Boolean = false
+  name: String!
+}
+
 type Hotel {
   address: String!
+  id: Float!
   isVegan: Boolean!
   name: String!
-  ownerName: String!
 }
 
 type Mutation {
-  createHotel(address: String!, isVegan: Boolean!, name: String!, ownerName: String!): Boolean!
+  createHotel(input: CreateHotelDto!): Boolean!
 }
 
 type Query {
-  hotels(veganOnly: Boolean!): [Hotel!]!
+  hotels: [Hotel!]!
 }
