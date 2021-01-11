@@ -3,8 +3,14 @@
 # ------------------------------------------------------
 
 type Hotel {
-  isGood: Boolean
+  address: String!
+  isVegan: Boolean!
   name: String!
+  ownerName: String!
+}
+
+type Mutation {
+  createHotel(address: String!, isVegan: Boolean!, name: String!, ownerName: String!): Boolean!
 }
 
 type Query {
