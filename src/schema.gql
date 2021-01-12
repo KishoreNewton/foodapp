@@ -2,23 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateHotelDto {
-  address: String!
-  isVegan: Boolean = false
-  name: String!
+input CreateAccountInput {
+  email: String!
+  password: String!
+  role: UserRole!
 }
 
-type Hotel {
-  address: String!
-  id: Float!
-  isVegan: Boolean!
-  name: String!
+type CreateAccountOutput {
+  error: String
+  ok: Boolean!
 }
 
 type Mutation {
-  createHotel(input: CreateHotelDto!): Boolean!
+  createAccount(input: CreateAccountInput!): CreateAccountOutput!
 }
 
 type Query {
-  hotels: [Hotel!]!
+  hi: Boolean!
+}
+
+enum UserRole {
+  Client
+  Delivery
+  Owner
 }

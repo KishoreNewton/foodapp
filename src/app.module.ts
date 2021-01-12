@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HotelModule } from './hotel/hotel.module';
-import { Hotel } from './hotel/entities/hotel.entity';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
+import { User } from './users/entities/users.entity';
 
 @Module({
   imports: [
@@ -13,7 +14,6 @@ import { Hotel } from './hotel/entities/hotel.entity';
       debug: true,
       playground: true
     }),
-    HotelModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -23,8 +23,10 @@ import { Hotel } from './hotel/entities/hotel.entity';
       database: process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: true,
-      entities: [Hotel]
-    })
+      entities: [User]
+    }),
+    UsersModule,
+    CommonModule
   ],
   controllers: [],
   providers: []
