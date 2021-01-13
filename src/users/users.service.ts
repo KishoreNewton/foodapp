@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as jwt from 'jsonwebtoken';
 import { CreateAccountInput } from './dtos/creat-account.dto';
 import { LoginInput } from './dtos/login.dto';
 import { User } from './entities/users.entity';
@@ -50,9 +51,15 @@ export class UsersService {
       if (!isCorrectPassword) {
         return {
           ok: false,
-          error: 'Worng password'
+          error: 'Wrong password'
         };
       }
+      const token = jwt.sign({ id: user.id, password: "12345" }, process.env.JWT_SECRET_KEY);
+      console.log(process.env.JWT_SECRET_KEY)
+      return {
+        ok: true,
+        token
+      };
     } catch (error) {
       return {
         ok: false,

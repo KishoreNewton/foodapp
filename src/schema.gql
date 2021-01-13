@@ -21,7 +21,7 @@ input LoginInput {
 type LoginOutput {
   error: String
   ok: Boolean!
-  token: String!
+  token: String
 }
 
 type Mutation {
