@@ -8,16 +8,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { CommonModule } from './common/common.module';
 import { User } from './users/entities/users.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
-import { extend } from '@nestjs/graphql/dist/utils';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context: ({ req }) => ({ user: req['user'] }),
       sortSchema: true,
       debug: true,
       playground: true
@@ -34,7 +33,6 @@ import { extend } from '@nestjs/graphql/dist/utils';
       entities: [User]
     }),
     UsersModule,
-    CommonModule,
     JwtModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY
     })
