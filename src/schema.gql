@@ -18,6 +18,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input EditProfileInput {
+  email: String
+  password: String
+}
+
+type EditProfileOutput {
+  error: String
+  ok: Boolean!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -31,7 +41,9 @@ type LoginOutput {
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
+  editProfile(input: EditProfileInput!): EditProfileOutput!
   login(input: LoginInput!): LoginOutput!
+  verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
 type Query {
@@ -47,6 +59,7 @@ type User {
   password: String!
   role: UserRole!
   updatedAt: DateTime!
+  verified: Boolean!
 }
 
 type UserProfileOutput {
@@ -59,4 +72,13 @@ enum UserRole {
   Client
   Delivery
   Owner
+}
+
+input VerifyEmailInput {
+  code: String!
+}
+
+type VerifyEmailOutput {
+  error: String
+  ok: Boolean!
 }
