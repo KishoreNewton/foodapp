@@ -13,6 +13,11 @@ type CreateAccountOutput {
   ok: Boolean!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 input LoginInput {
   email: String!
   password: String!
@@ -32,12 +37,22 @@ type Mutation {
 type Query {
   hi: Boolean!
   me: User!
+  userProfile(userId: Float!): UserProfileOutput!
 }
 
 type User {
+  createdAt: DateTime!
   email: String!
+  id: Float!
   password: String!
   role: UserRole!
+  updatedAt: DateTime!
+}
+
+type UserProfileOutput {
+  error: String
+  ok: Boolean!
+  user: User
 }
 
 enum UserRole {
