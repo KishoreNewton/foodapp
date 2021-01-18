@@ -92,14 +92,14 @@ export class UsersService {
   async findById(id: number): Promise<UserProfileOutput> {
     try {
       const user = await this.users.findOne({ id });
-      if(user) {
+      if (user) {
         return {
           ok: true,
           user
-        }
+        };
       }
-    } catch(error) {
-      return { ok: false, error: 'User not found'}
+    } catch (error) {
+      return { ok: false, error: 'User not found' };
     }
   }
 
@@ -111,7 +111,7 @@ export class UsersService {
         user.verified = false;
         await this.verifications.delete({ user: { id: user.id } });
         const verification = await this.verifications.save(
-          this.verifications.create({ user }),
+          this.verifications.create({ user })
         );
         // this.mailService.sendVerificationEmail(user.email, verification.code);
       }
@@ -120,7 +120,7 @@ export class UsersService {
       }
       await this.users.save(user);
       return {
-        ok: true,
+        ok: true
       };
     } catch (error) {
       return { ok: false, error: 'Could not update profile.' };
@@ -135,15 +135,16 @@ export class UsersService {
       );
       if (verification) {
         verification.user.verified = true;
-        this.users.save(verification.user);
+        await this.users.save(verification.user);
+        await this.verifications.delete(verification.id);
         return { ok: true };
       }
-      return { ok: false, error: "Verification not found" }
+      return { ok: false, error: 'Verification not found' };
     } catch (error) {
       return {
         ok: false,
         error
-      }
+      };
     }
   }
 }

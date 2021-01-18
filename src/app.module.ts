@@ -12,6 +12,7 @@ import { User } from './users/entities/users.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/verification.entity';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -36,6 +37,9 @@ import { Verification } from './users/entities/verification.entity';
     UsersModule,
     JwtModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY
+    }),
+    MailModule.forRoot({
+      source: process.env.AWS_SOURCE
     })
   ],
   controllers: [],
