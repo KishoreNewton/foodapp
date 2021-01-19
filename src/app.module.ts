@@ -12,6 +12,7 @@ import { User } from './users/entities/users.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/verification.entity';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -30,12 +31,15 @@ import { Verification } from './users/entities/verification.entity';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
       synchronize: true,
-      logging: true,
+      logging: false,
       entities: [User, Verification]
     }),
     UsersModule,
     JwtModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY
+    }),
+    MailModule.forRoot({
+      source: process.env.AWS_SOURCE
     })
   ],
   controllers: [],

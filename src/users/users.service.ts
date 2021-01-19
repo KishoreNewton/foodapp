@@ -9,6 +9,7 @@ import { EditProfileInput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { UserProfileOutput } from './dtos/user-profile.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,8 @@ export class UsersService {
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Verification)
     private readonly verifications: Repository<Verification>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly mailService: MailService
   ) {}
 
   async createAccount({
@@ -35,11 +37,12 @@ export class UsersService {
       const user = await this.users.save(
         this.users.create({ email, password, role })
       );
-      await this.verifications.save(
+      const verification = await this.verifications.save(
         this.verifications.create({
           user
         })
       );
+      this.mailService.sendVerificationEmail(user.email, verification.code);
       return { ok: true };
     } catch (err) {
       return {
@@ -92,14 +95,14 @@ export class UsersService {
   async findById(id: number): Promise<UserProfileOutput> {
     try {
       const user = await this.users.findOne({ id });
-      if(user) {
+      if (user) {
         return {
           ok: true,
           user
-        }
+        };
       }
-    } catch(error) {
-      return { ok: false, error: 'User not found'}
+    } catch (error) {
+      return { ok: false, error: 'User not found' };
     }
   }
 
@@ -111,16 +114,16 @@ export class UsersService {
         user.verified = false;
         await this.verifications.delete({ user: { id: user.id } });
         const verification = await this.verifications.save(
-          this.verifications.create({ user }),
+          this.verifications.create({ user })
         );
-        // this.mailService.sendVerificationEmail(user.email, verification.code);
+        this.mailService.sendVerificationEmail(user.email, verification.code);
       }
       if (password) {
         user.password = password;
       }
       await this.users.save(user);
       return {
-        ok: true,
+        ok: true
       };
     } catch (error) {
       return { ok: false, error: 'Could not update profile.' };
@@ -135,15 +138,16 @@ export class UsersService {
       );
       if (verification) {
         verification.user.verified = true;
-        this.users.save(verification.user);
+        await this.users.save(verification.user);
+        await this.verifications.delete(verification.id);
         return { ok: true };
       }
-      return { ok: false, error: "Verification not found" }
+      return { ok: false, error: 'Verification not found' };
     } catch (error) {
       return {
         ok: false,
         error
-      }
+      };
     }
   }
 }
