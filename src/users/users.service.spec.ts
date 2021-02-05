@@ -170,8 +170,11 @@ describe('UserService', () => {
         id: 1,
         checkPassword: jest.fn(() => Promise.resolve(true))
       };
+
       usersRepository.findOne.mockResolvedValue(mockedUser);
+
       const result = await service.login(loginArgs);
+
       expect(jwtService.sign).toHaveBeenCalledTimes(1);
       expect(jwtService.sign).toHaveBeenCalledWith(expect.any(Number));
       expect(result).toEqual({ ok: true, token: 'signed-token' });
@@ -179,7 +182,9 @@ describe('UserService', () => {
 
     it('should fail on exception', async () => {
       usersRepository.findOne.mockRejectedValue(new Error());
+
       const result = await service.login(loginArgs);
+
       expect(result).toEqual({ ok: false, error: expect.any(Object) });
     });
   });
@@ -189,11 +194,23 @@ describe('UserService', () => {
       const findByIdArgs = {
         id: 1
       };
+
       usersRepository.findOneOrFail.mockResolvedValue(findByIdArgs);
+
       const result = await service.findById(1);
+
       expect(result).toEqual({ ok: true, user: findByIdArgs });
     });
+
+    it('should fail if no user is found', async () => {
+      usersRepository.findOneOrFail.mockRejectedValue(new Error());
+
+      const result = await service.findById(1);
+
+      expect(result).toEqual({ ok: false, error: 'User not found' });
+    });
   });
+
   // it.todo('findById');
   // it.todo('editProfile');
   // it.todo('verifyEmail');
