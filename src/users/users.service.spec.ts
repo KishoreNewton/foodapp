@@ -10,7 +10,8 @@ import { UsersService } from './users.service';
 const mockRepository = () => ({
   findOne: jest.fn(),
   save: jest.fn(),
-  create: jest.fn()
+  create: jest.fn(),
+  findOneOrFail: jest.fn()
 });
 
 const mockJwtService = {
@@ -179,13 +180,20 @@ describe('UserService', () => {
     it('should fail on exception', async () => {
       usersRepository.findOne.mockRejectedValue(new Error());
       const result = await service.login(loginArgs);
-      expect(result).toEqual({ ok: false, error: "Can't login user" });
+      expect(result).toEqual({ ok: false, error: expect.any(Object) });
     });
   });
 
   describe('findById', () => {
-    
-  })
+    it('should find an existing user', async () => {
+      const findByIdArgs = {
+        id: 1
+      };
+      usersRepository.findOneOrFail.mockResolvedValue(findByIdArgs);
+      const result = await service.findById(1);
+      expect(result).toEqual({ ok: true, user: findByIdArgs });
+    });
+  });
   // it.todo('findById');
   // it.todo('editProfile');
   // it.todo('verifyEmail');
