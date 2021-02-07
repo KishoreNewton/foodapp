@@ -170,8 +170,11 @@ describe('UserService', () => {
         id: 1,
         checkPassword: jest.fn(() => Promise.resolve(true))
       };
+
       usersRepository.findOne.mockResolvedValue(mockedUser);
+
       const result = await service.login(loginArgs);
+
       expect(jwtService.sign).toHaveBeenCalledTimes(1);
       expect(jwtService.sign).toHaveBeenCalledWith(expect.any(Number));
       expect(result).toEqual({ ok: true, token: 'signed-token' });
@@ -179,7 +182,9 @@ describe('UserService', () => {
 
     it('should fail on exception', async () => {
       usersRepository.findOne.mockRejectedValue(new Error());
+
       const result = await service.login(loginArgs);
+
       expect(result).toEqual({ ok: false, error: expect.any(Object) });
     });
   });
@@ -189,12 +194,74 @@ describe('UserService', () => {
       const findByIdArgs = {
         id: 1
       };
+
       usersRepository.findOneOrFail.mockResolvedValue(findByIdArgs);
+
       const result = await service.findById(1);
+
       expect(result).toEqual({ ok: true, user: findByIdArgs });
     });
+
+    it('should fail if no user is found', async () => {
+      usersRepository.findOneOrFail.mockRejectedValue(new Error());
+
+      const result = await service.findById(1);
+
+      expect(result).toEqual({ ok: false, error: 'User not found' });
+    });
   });
-  // it.todo('findById');
-  // it.todo('editProfile');
-  // it.todo('verifyEmail');
+
+  describe('edit Profile', () => {
+    it('should change email', async () => {
+      const oldUser = {
+        email: 'test@test.com',
+        verified: true
+      };
+      const editProfileArgs = {
+        userId: 1,
+        input: { email: process.env.AWS_SOURCE }
+      };
+      const newVerification = {
+        code: 'code'
+      };
+      const newUser = {
+        verified: false,
+        email: editProfileArgs.input.email
+      };
+
+      usersRepository.findOne.mockResolvedValue(oldUser);
+      await service.editProfile(editProfileArgs.userId, editProfileArgs.input);
+      verificationRepository.create.mockReturnValue(newVerification);
+      verificationRepository.save.mockResolvedValue(newVerification);
+
+      expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(usersRepository.findOne).toHaveBeenCalledWith(
+        editProfileArgs.userId
+      );
+
+      // Fix aws SES later
+      // expect(verificationRepository.create).toHaveBeenCalledTimes(1)
+    });
+
+    it('should change password', async () => {
+      const editProfileArgs = {
+        userId: 1,
+        input: { password: 'newPassword' }
+      };
+
+      usersRepository.findOne.mockResolvedValue({ password: 'oldPassword' });
+
+      const result = await service.editProfile(
+        editProfileArgs.userId,
+        editProfileArgs.input
+      );
+      expect(usersRepository.save).toHaveBeenCalledTimes(1);
+      expect(usersRepository.save).toHaveBeenCalledWith(editProfileArgs.input);
+      expect(result).toEqual({ ok: true });
+    });
+
+    it('should change email', async() => {
+      
+    })
+  });
 });
