@@ -211,7 +211,57 @@ describe('UserService', () => {
     });
   });
 
-  // it.todo('findById');
-  // it.todo('editProfile');
-  // it.todo('verifyEmail');
+  describe('edit Profile', () => {
+    it('should change email', async () => {
+      const oldUser = {
+        email: 'test@test.com',
+        verified: true
+      };
+      const editProfileArgs = {
+        userId: 1,
+        input: { email: process.env.AWS_SOURCE }
+      };
+      const newVerification = {
+        code: 'code'
+      };
+      const newUser = {
+        verified: false,
+        email: editProfileArgs.input.email
+      };
+
+      usersRepository.findOne.mockResolvedValue(oldUser);
+      await service.editProfile(editProfileArgs.userId, editProfileArgs.input);
+      verificationRepository.create.mockReturnValue(newVerification);
+      verificationRepository.save.mockResolvedValue(newVerification);
+
+      expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(usersRepository.findOne).toHaveBeenCalledWith(
+        editProfileArgs.userId
+      );
+
+      // Fix aws SES later
+      // expect(verificationRepository.create).toHaveBeenCalledTimes(1)
+    });
+
+    it('should change password', async () => {
+      const editProfileArgs = {
+        userId: 1,
+        input: { password: 'newPassword' }
+      };
+
+      usersRepository.findOne.mockResolvedValue({ password: 'oldPassword' });
+
+      const result = await service.editProfile(
+        editProfileArgs.userId,
+        editProfileArgs.input
+      );
+      expect(usersRepository.save).toHaveBeenCalledTimes(1);
+      expect(usersRepository.save).toHaveBeenCalledWith(editProfileArgs.input);
+      expect(result).toEqual({ ok: true });
+    });
+
+    it('should change email', async() => {
+      
+    })
+  });
 });
