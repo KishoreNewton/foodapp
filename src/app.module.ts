@@ -29,7 +29,10 @@ import { MailModule } from './mail/mail.module';
       port: 5432,
       username: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DATABASE,
+      database:
+        process.env.NODE_ENV === 'test'
+          ? process.env.DB_NAME_TEST
+          : process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: false,
       entities: [User, Verification]
@@ -50,6 +53,6 @@ export class AppModule implements NestModule {
     consumer.apply(JwtMiddleware).forRoutes({
       path: 'graphql',
       method: RequestMethod.ALL
-    })
+    });
   }
 }
