@@ -107,23 +107,40 @@ export class UsersService {
   async editProfile(userId: number, { email, password }: EditProfileInput) {
     try {
       const user = await this.users.findOne(userId);
+
       if (email) {
+        const existingEmail = await this.users.findOne({ email });
+
+        if (existingEmail) {
+          return {
+            ok: false,
+            error: 'Another account is accositated with this mail'
+          };
+        }
+
         user.email = email;
         user.verified = false;
+
         await this.verifications.delete({ user: { id: user.id } });
+
         const verification = await this.verifications.save(
           this.verifications.create({ user })
         );
+
         this.mailService.sendVerificationEmail(user.email, verification.code);
       }
+
       if (password) {
         user.password = password;
       }
+
       await this.users.save(user);
+
       return {
         ok: true
       };
     } catch (error) {
+      console.log(error);
       return { ok: false, error: 'Could not update profile.' };
     }
   }
@@ -144,7 +161,7 @@ export class UsersService {
     } catch (error) {
       return {
         ok: false,
-        error: "Could not verify email."
+        error: 'Could not verify email.'
       };
     }
   }
