@@ -21,7 +21,7 @@ export class MailService {
       if (err) {
         console.log(err.stack);
       } else {
-        console.log('Access key:', AWS.config.credentials.accessKeyId);
+        console.log('worked');
       }
     });
 
@@ -49,9 +49,7 @@ export class MailService {
         }
       },
       Source: process.env.AWS_SOURCE,
-      ReplyToAddresses: [
-        process.env.AWS_SOURCE
-      ]
+      ReplyToAddresses: [process.env.AWS_SOURCE]
     };
 
     let sendPromise = new AWS.SES({ apiVersion: '2010-12-01' })
@@ -69,7 +67,9 @@ export class MailService {
   }
 
   sendVerificationEmail(email: string, code: string) {
-    this.sendEmail(email, `Hey ${email} here is the verification code 🔓 ${code} 🔓  Copy and paste this code to verify account`)
+    this.sendEmail(
+      email,
+      `Hey ${email} here is the verification code 🔓 ${code} 🔓  Copy and paste this code to verify account`
+    );
   }
-
 }
