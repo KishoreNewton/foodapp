@@ -14,6 +14,8 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
 
+console.log(process.env.AWS_SOURCE_DEV);
+
 @Module({
   imports: [
     GraphQLModule.forRoot({

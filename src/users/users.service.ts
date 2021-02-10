@@ -42,7 +42,7 @@ export class UsersService {
           user
         })
       );
-      this.mailService.sendVerificationEmail(user.email, verification.code);
+      // this.mailService.sendVerificationEmail(user.email, verification.code);
       return { ok: true };
     } catch (err) {
       return {
@@ -127,7 +127,7 @@ export class UsersService {
           this.verifications.create({ user })
         );
 
-        this.mailService.sendVerificationEmail(user.email, verification.code);
+        // this.mailService.sendVerificationEmail(user.email, verification.code);
       }
 
       if (password) {
