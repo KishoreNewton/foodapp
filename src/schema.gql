@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Category {
+  coverImg: String!
+  createdAt: DateTime!
+  id: Float!
+  name: String!
+  restaurants: [Restaurant!]!
+  updatedAt: DateTime!
+}
+
 input CreateAccountInput {
   email: String!
   password: String!
@@ -52,11 +61,23 @@ type Query {
   userProfile(userId: Float!): UserProfileOutput!
 }
 
+type Restaurant {
+  address: String!
+  bgImage: String!
+  category: Category
+  createdAt: DateTime!
+  id: Float!
+  name: String!
+  owner: User!
+  updatedAt: DateTime!
+}
+
 type User {
   createdAt: DateTime!
   email: String!
   id: Float!
   password: String!
+  restaurants: [Restaurant!]!
   role: UserRole!
   updatedAt: DateTime!
   verified: Boolean!

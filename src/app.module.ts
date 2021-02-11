@@ -13,8 +13,8 @@ import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
-
-console.log(process.env.AWS_SOURCE_DEV);
+import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { Category } from './restaurants/entities/category.entity';
 
 @Module({
   imports: [
@@ -37,7 +37,7 @@ console.log(process.env.AWS_SOURCE_DEV);
           : process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: false,
-      entities: [User, Verification]
+      entities: [User, Verification, Restaurant, Category]
     }),
     UsersModule,
     JwtModule.forRoot({

@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import {
   Field,
@@ -9,6 +9,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { IsBoolean, IsEmail, IsEnum, IsString } from 'class-validator';
+import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 
 enum UserRole {
   Client,
@@ -42,10 +43,14 @@ export class User extends CoreEntity {
   @IsBoolean()
   verified: boolean;
 
+  @Field(() => [Restaurant])
+  @OneToMany(() => Restaurant, restaurant => restaurant.owner)
+  restaurants: Restaurant[];
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword(): Promise<void> {
-    if(this.password) {
+    if (this.password) {
       try {
         this.password = await bcrypt.hash(this.password, 10);
       } catch (err) {
