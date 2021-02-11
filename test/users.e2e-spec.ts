@@ -25,6 +25,11 @@ describe('UserModule (e2e)', () => {
   let verificationsRepository: Repository<Verification>;
   let jwtToken: string;
 
+  // const baseTest = () => request(app.getHttpServer()).post(GRAPHQL_ENDPOINT);
+  // const publicTest = (query: string) => baseTest().send({ query });
+  // const privateTest = (query: string) =>
+  //   baseTest().set('X_JWT', jwtToken).send({ query });
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AppModule]
