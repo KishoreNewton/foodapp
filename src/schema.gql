@@ -2,14 +2,34 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AllCategoriesOutput {
+  categories: [Category!]
+  error: String
+  ok: Boolean!
+}
+
 type Category {
   coverImg: String
   createdAt: DateTime!
   id: Float!
   name: String!
-  restaurants: [Restaurant!]!
+  restaurantCount: Int!
+  restaurants: [Restaurant!]
   slug: String!
   updatedAt: DateTime!
+}
+
+input CategoryInput {
+  page: Int = 1
+  slug: String!
+}
+
+type CategoryOutput {
+  category: Category
+  error: String
+  ok: Boolean!
+  restaurants: [Restaurant!]
+  totalPages: Int
 }
 
 input CreateAccountInput {
@@ -98,6 +118,8 @@ type Mutation {
 }
 
 type Query {
+  allCategories: AllCategoriesOutput!
+  category(input: CategoryInput!): CategoryOutput!
   hi: Boolean!
   me: User!
   userProfile(userId: Float!): UserProfileOutput!
