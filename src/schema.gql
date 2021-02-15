@@ -40,6 +40,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteRestaurantInput {
+  address: String = "address"
+  categroyName: String
+  coverImg: String
+  name: String
+  restaurantId: Float!
+}
+
+type DeleteRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
 input EditProfileInput {
   email: String
   password: String
@@ -77,6 +90,7 @@ type LoginOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createRestaurant(input: CreateRestaurantInput!): CreateRestaurantOutput!
+  deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
   editRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
   login(input: LoginInput!): LoginOutput!
