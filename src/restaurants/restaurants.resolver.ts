@@ -113,7 +113,7 @@ export class CategoryResolver {
 export class DishResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Mutation(type => CreateDishOutput)
+  @Mutation(() => CreateDishOutput)
   @Role(['Owner'])
   createDish(
     @AuthUser() owner: User,
@@ -122,7 +122,7 @@ export class DishResolver {
     return this.restaurantService.createDish(owner, createDishInput);
   }
 
-  @Mutation(type => EditDishOutput)
+  @Mutation(() => EditDishOutput)
   @Role(['Owner'])
   editDish(
     @AuthUser() owner: User,
@@ -131,7 +131,7 @@ export class DishResolver {
     return this.restaurantService.editDish(owner, editDishInput);
   }
 
-  @Mutation(type => DeleteDishOutput)
+  @Mutation(() => DeleteDishOutput)
   @Role(['Owner'])
   deleteDish(
     @AuthUser() owner: User,
