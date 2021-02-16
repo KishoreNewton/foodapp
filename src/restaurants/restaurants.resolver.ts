@@ -117,7 +117,7 @@ export class DishResolver {
   @Role(['Owner'])
   createDish(
     @AuthUser() owner: User,
-    @Args('input') createDishInput: CreateDishInput,
+    @Args('input') createDishInput: CreateDishInput
   ): Promise<CreateDishOutput> {
     return this.restaurantService.createDish(owner, createDishInput);
   }
@@ -126,7 +126,7 @@ export class DishResolver {
   @Role(['Owner'])
   editDish(
     @AuthUser() owner: User,
-    @Args('input') editDishInput: EditDishInput,
+    @Args('input') editDishInput: EditDishInput
   ): Promise<EditDishOutput> {
     return this.restaurantService.editDish(owner, editDishInput);
   }
@@ -135,7 +135,7 @@ export class DishResolver {
   @Role(['Owner'])
   deleteDish(
     @AuthUser() owner: User,
-    @Args('input') deleteDishInput: DeleteDishInput,
+    @Args('input') deleteDishInput: DeleteDishInput
   ): Promise<DeleteDishOutput> {
     return this.restaurantService.deleteDish(owner, deleteDishInput);
   }
