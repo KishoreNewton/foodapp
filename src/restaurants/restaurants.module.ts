@@ -6,7 +6,7 @@ import { CategoryRepository } from './repositories/category.repository';
 import {
   CategoryResolver,
   DishResolver,
-  RestaurantResolver,
+  RestaurantResolver
 } from './restaurants.resolver';
 import { RestaurantService } from './restaurants.service';
 
@@ -16,7 +16,7 @@ import { RestaurantService } from './restaurants.service';
     RestaurantResolver,
     CategoryResolver,
     DishResolver,
-    RestaurantService,
-  ],
+    RestaurantService
+  ]
 })
 export class RestaurantsModule {}
