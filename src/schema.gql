@@ -30,6 +30,7 @@ type CategoryOutput {
   ok: Boolean!
   restaurants: [Restaurant!]
   totalPages: Int
+  totalResults: Int
 }
 
 input CreateAccountInput {
@@ -122,6 +123,9 @@ type Query {
   category(input: CategoryInput!): CategoryOutput!
   hi: Boolean!
   me: User!
+  restaurant(input: RestaurantInput!): RestaurantOutput!
+  restaurants(input: RestaurantsInput!): RestaurantsOutput!
+  searchRestaurant(input: SearchRestaurantInput!): SearchRestaurantOutput!
   userProfile(userId: Float!): UserProfileOutput!
 }
 
@@ -134,6 +138,41 @@ type Restaurant {
   name: String!
   owner: User!
   updatedAt: DateTime!
+}
+
+input RestaurantInput {
+  restaurantId: Int!
+}
+
+type RestaurantOutput {
+  error: String
+  ok: Boolean!
+  restaurant: Restaurant
+}
+
+input RestaurantsInput {
+  page: Int = 1
+}
+
+type RestaurantsOutput {
+  error: String
+  ok: Boolean!
+  results: [Restaurant!]
+  totalPages: Int
+  totalResults: Int
+}
+
+input SearchRestaurantInput {
+  page: Int = 1
+  query: String!
+}
+
+type SearchRestaurantOutput {
+  error: String
+  ok: Boolean!
+  restaurants: [Restaurant!]
+  totalPages: Int
+  totalResults: Int
 }
 
 type User {
