@@ -18,6 +18,7 @@ import { Category } from './restaurants/entities/category.entity';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
+import { Dish } from './restaurants/entities/dish.entity';
 
 @Module({
   imports: [
@@ -39,8 +40,8 @@ import { CommonModule } from './common/common.module';
           ? process.env.DB_NAME_TEST
           : process.env.POSTGRES_DATABASE,
       synchronize: true,
-      logging: false,
-      entities: [User, Verification, Restaurant, Category]
+      logging: true,
+      entities: [User, Verification, Restaurant, Category, Dish]
     }),
     UsersModule,
     RestaurantsModule,

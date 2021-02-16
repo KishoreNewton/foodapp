@@ -44,6 +44,19 @@ type CreateAccountOutput {
   ok: Boolean!
 }
 
+input CreateDishInput {
+  description: String!
+  name: String!
+  options: [DishOptionInputType!]
+  price: Int!
+  restaurantId: Int!
+}
+
+type CreateDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInput {
   address: String = "address"
   categroyName: String!
@@ -61,6 +74,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteDishInput {
+  dishId: Int!
+}
+
+type DeleteDishOutput {
+  error: String
+  ok: Boolean!
+}
+
 input DeleteRestaurantInput {
   address: String = "address"
   categroyName: String
@@ -70,6 +92,53 @@ input DeleteRestaurantInput {
 }
 
 type DeleteRestaurantOutput {
+  error: String
+  ok: Boolean!
+}
+
+type Dish {
+  createdAt: DateTime!
+  description: String!
+  id: Float!
+  name: String!
+  options: [DishOption!]
+  photo: String
+  price: Int!
+  restaurant: Restaurant!
+  updatedAt: DateTime!
+}
+
+type DishChoice {
+  extra: Int
+  name: String!
+}
+
+input DishChoiceInputType {
+  extra: Int
+  name: String!
+}
+
+type DishOption {
+  choices: [DishChoice!]
+  extra: Int
+  name: String!
+}
+
+input DishOptionInputType {
+  choices: [DishChoiceInputType!]
+  extra: Int
+  name: String!
+}
+
+input EditDishInput {
+  description: String
+  dishId: Int!
+  name: String
+  options: [DishOptionInputType!]
+  price: Int
+}
+
+type EditDishOutput {
   error: String
   ok: Boolean!
 }
@@ -110,8 +179,11 @@ type LoginOutput {
 
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
+  createDish(input: CreateDishInput!): CreateDishOutput!
   createRestaurant(input: CreateRestaurantInput!): CreateRestaurantOutput!
+  deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
+  editDish(input: EditDishInput!): EditDishOutput!
   editProfile(input: EditProfileInput!): EditProfileOutput!
   editRestaurant(input: EditRestaurantInput!): EditRestaurantOutput!
   login(input: LoginInput!): LoginOutput!
@@ -135,8 +207,11 @@ type Restaurant {
   coverImg: String!
   createdAt: DateTime!
   id: Float!
+  isPromoted: Boolean!
+  menu: [Dish!]!
   name: String!
   owner: User!
+  promotedUntil: DateTime
   updatedAt: DateTime!
 }
 
