@@ -190,6 +190,39 @@ type Mutation {
   verifyEmail(input: VerifyEmailInput!): VerifyEmailOutput!
 }
 
+type Order {
+  createdAt: DateTime!
+  customer: User
+  driver: User
+  id: Float!
+  items: [OrderItem!]!
+  restaurant: Restaurant
+  status: OrderStatus!
+  total: Float
+  updatedAt: DateTime!
+}
+
+type OrderItem {
+  createdAt: DateTime!
+  dish: Dish!
+  id: Float!
+  options: [OrderItemOption!]
+  updatedAt: DateTime!
+}
+
+type OrderItemOption {
+  choice: String
+  name: String!
+}
+
+enum OrderStatus {
+  Cooked
+  Cooking
+  Delivered
+  Pending
+  PickedUp
+}
+
 type Query {
   allCategories: AllCategoriesOutput!
   category(input: CategoryInput!): CategoryOutput!
@@ -210,6 +243,7 @@ type Restaurant {
   isPromoted: Boolean!
   menu: [Dish!]!
   name: String!
+  orders: [Order!]!
   owner: User!
   promotedUntil: DateTime
   updatedAt: DateTime!
@@ -254,8 +288,10 @@ type User {
   createdAt: DateTime!
   email: String!
   id: Float!
+  orders: [Order!]!
   password: String!
   restaurants: [Restaurant!]!
+  rides: [Order!]!
   role: UserRole!
   updatedAt: DateTime!
   verified: Boolean!

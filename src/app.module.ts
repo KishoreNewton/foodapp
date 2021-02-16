@@ -19,6 +19,8 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { Dish } from './restaurants/entities/dish.entity';
+import { Order } from './orders/entities/order.entity';
+import { OrderItem } from './orders/entities/order-item.entity';
 
 @Module({
   imports: [
@@ -41,7 +43,7 @@ import { Dish } from './restaurants/entities/dish.entity';
           : process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: true,
-      entities: [User, Verification, Restaurant, Category, Dish]
+      entities: [User, Verification, Restaurant, Category, Dish, Order, OrderItem]
     }),
     UsersModule,
     RestaurantsModule,
