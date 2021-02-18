@@ -7,7 +7,7 @@ import {
   NEW_COOKED_ORDER,
   NEW_ORDER_UPDATE,
   NEW_PENDING_ORDER,
-  PUB_SUB,
+  PUB_SUB
 } from 'src/common/common.constant';
 import { User } from 'src/users/entities/users.entity';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
@@ -23,7 +23,7 @@ import { OrderService } from './orders.service';
 export class OrderResolver {
   constructor(
     private readonly ordersService: OrderService,
-    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub
   ) {}
 
   @Mutation(returns => CreateOrderOutput)
@@ -31,7 +31,7 @@ export class OrderResolver {
   async createOrder(
     @AuthUser() customer: User,
     @Args('input')
-    createOrderInput: CreateOrderInput,
+    createOrderInput: CreateOrderInput
   ): Promise<CreateOrderOutput> {
     return this.ordersService.createOrder(customer, createOrderInput);
   }
@@ -40,7 +40,7 @@ export class OrderResolver {
   @Role(['Any'])
   async getOrders(
     @AuthUser() user: User,
-    @Args('input') getOrdersInput: GetOrdersInput,
+    @Args('input') getOrdersInput: GetOrdersInput
   ): Promise<GetOrdersOutput> {
     return this.ordersService.getOrders(user, getOrdersInput);
   }
@@ -49,7 +49,7 @@ export class OrderResolver {
   @Role(['Any'])
   async getOrder(
     @AuthUser() user: User,
-    @Args('input') getOrderInput: GetOrderInput,
+    @Args('input') getOrderInput: GetOrderInput
   ): Promise<GetOrderOutput> {
     return this.ordersService.getOrder(user, getOrderInput);
   }
@@ -58,7 +58,7 @@ export class OrderResolver {
   @Role(['Any'])
   async editOrder(
     @AuthUser() user: User,
-    @Args('input') editOrderInput: EditOrderInput,
+    @Args('input') editOrderInput: EditOrderInput
   ): Promise<EditOrderOutput> {
     return this.ordersService.editOrder(user, editOrderInput);
   }
@@ -67,7 +67,7 @@ export class OrderResolver {
     filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
       return ownerId === user.id;
     },
-    resolve: ({ pendingOrders: { order } }) => order,
+    resolve: ({ pendingOrders: { order } }) => order
   })
   @Role(['Owner'])
   pendingOrders() {
@@ -84,7 +84,7 @@ export class OrderResolver {
     filter: (
       { orderUpdates: order }: { orderUpdates: Order },
       { input }: { input: OrderUpdatesInput },
-      { user }: { user: User },
+      { user }: { user: User }
     ) => {
       if (
         order.driverId !== user.id &&
@@ -94,7 +94,7 @@ export class OrderResolver {
         return false;
       }
       return order.id === input.id;
-    },
+    }
   })
   @Role(['Any'])
   orderUpdates(@Args('input') orderUpdatesInput: OrderUpdatesInput) {
@@ -105,7 +105,7 @@ export class OrderResolver {
   @Role(['Delivery'])
   takeOrder(
     @AuthUser() driver: User,
-    @Args('input') takeOrderInput: TakeOrderInput,
+    @Args('input') takeOrderInput: TakeOrderInput
   ): Promise<TakeOrderOutput> {
     return this.ordersService.takeOrder(driver, takeOrderInput);
   }
