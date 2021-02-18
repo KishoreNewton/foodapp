@@ -21,12 +21,18 @@ import { CommonModule } from './common/common.module';
 import { Dish } from './restaurants/entities/dish.entity';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({ req }) => ({ user: req['user'] }),
+      context: ({ req, connection }) => {
+        const TOKEN_KEY = 'x-jwt';
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY]
+        };
+      },
       sortSchema: true,
       debug: true,
       playground: true
@@ -43,12 +49,21 @@ import { OrderItem } from './orders/entities/order-item.entity';
           : process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: true,
-      entities: [User, Verification, Restaurant, Category, Dish, Order, OrderItem]
+      entities: [
+        User,
+        Verification,
+        Restaurant,
+        Category,
+        Dish,
+        Order,
+        OrderItem
+      ]
     }),
     UsersModule,
     RestaurantsModule,
     AuthModule,
     CommonModule,
+    OrdersModule,
     JwtModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY
     }),
