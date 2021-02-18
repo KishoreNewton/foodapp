@@ -365,7 +365,7 @@ type User {
   id: Float!
   orders: [Order!]!
   password: String!
-  restaurants: [Restaurant!]!
+  restaurants: [Restaurant!]
   rides: [Order!]!
   role: UserRole!
   updatedAt: DateTime!
