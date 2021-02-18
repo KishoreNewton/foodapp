@@ -30,7 +30,8 @@ export class OrderService {
     private readonly restaurants: Repository<Restaurant>,
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
-    @Inject(PUB_SUB) private readonly pubSub: PubSub
+    @Inject(PUB_SUB) 
+    private readonly pubSub: PubSub
   ) {}
 
   async createOrder(
