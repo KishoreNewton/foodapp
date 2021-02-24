@@ -22,6 +22,8 @@ import { Order } from './orders/entities/order.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { OrderItem } from './orders/entities/order-item.entity';
 import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/entities/payment.entity';
 
 @Module({
   imports: [
@@ -31,13 +33,14 @@ import { OrdersModule } from './orders/orders.module';
       context: ({ req, connection }) => {
         const TOKEN_KEY = 'x-jwt';
         return {
-          token: req ? req.headers[TOKEN_KEY] : connection.context["X-JWT"]
+          token: req ? req.headers[TOKEN_KEY] : connection.context['X-JWT']
         };
       },
       sortSchema: true,
       debug: true,
       playground: true
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -57,7 +60,8 @@ import { OrdersModule } from './orders/orders.module';
         Category,
         Dish,
         Order,
-        OrderItem
+        OrderItem,
+        Payment
       ]
     }),
     ScheduleModule.forRoot(),
@@ -66,12 +70,14 @@ import { OrdersModule } from './orders/orders.module';
     AuthModule,
     CommonModule,
     OrdersModule,
+    PaymentsModule,
     JwtModule.forRoot({
       privateKey: process.env.JWT_SECRET_KEY
     }),
     MailModule.forRoot({
       source: process.env.AWS_SOURCE
-    })
+    }),
+    PaymentsModule
   ],
   controllers: [],
   providers: []
