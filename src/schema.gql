@@ -73,6 +73,16 @@ type CreateOrderOutput {
   orderId: Int
 }
 
+input CreatePaymentInput {
+  restaurantId: Int!
+  transactionId: Int!
+}
+
+type CreatePaymentOutput {
+  error: String
+  ok: Boolean!
+}
+
 input CreateRestaurantInput {
   address: String = "address"
   categroyName: String!
@@ -212,6 +222,12 @@ type GetOrdersOutput {
   orders: [Order!]
 }
 
+type GetPaymentsOutput {
+  error: String
+  ok: Boolean!
+  payments: [Payment!]
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -227,6 +243,7 @@ type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createDish(input: CreateDishInput!): CreateDishOutput!
   createOrder(input: CreateOrderInput!): CreateOrderOutput!
+  createPayment(input: CreatePaymentInput!): CreatePaymentOutput!
   createRestaurant(input: CreateRestaurantInput!): CreateRestaurantOutput!
   deleteDish(input: DeleteDishInput!): DeleteDishOutput!
   deleteRestaurant(input: DeleteRestaurantInput!): DeleteRestaurantOutput!
@@ -281,11 +298,22 @@ input OrderUpdatesInput {
   id: Float!
 }
 
+type Payment {
+  createdAt: DateTime!
+  id: Float!
+  restaurant: Restaurant!
+  restaurantId: Int!
+  transactionId: Int!
+  updatedAt: DateTime!
+  user: User!
+}
+
 type Query {
   allCategories: AllCategoriesOutput!
   category(input: CategoryInput!): CategoryOutput!
   getOrder(input: GetOrderInput!): GetOrderOutput!
   getOrders(input: GetOrdersInput!): GetOrdersOutput!
+  getPayments: GetPaymentsOutput!
   hi: Boolean!
   me: User!
   restaurant(input: RestaurantInput!): RestaurantOutput!
@@ -365,6 +393,7 @@ type User {
   id: Float!
   orders: [Order!]!
   password: String!
+  payments: [Payment!]!
   restaurants: [Restaurant!]
   rides: [Order!]!
   role: UserRole!
