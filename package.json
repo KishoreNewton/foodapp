@@ -33,7 +33,7 @@
     "apollo-server-express": "^2.19.1",
     "aws-sdk": "^2.828.0",
     "bcrypt": "^5.0.0",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "graphql": "^15.4.0",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "^7.0.2",
